@@ -8,8 +8,9 @@ from PIL import Image
 import io
 import torch
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 genai.configure(api_key="AIzaSyDUIy8e6M5KTS348R1rQFWabw1KtYExXx4")
-loaded_model = torch.load('model.pth', map_location=torch.device('cpu'))
+loaded_model = torch.load('model.pth', map_location=device)
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
@@ -57,13 +58,13 @@ def uploadPhoto():
         response.resolve()
         response = to_markdown(response.text).data
         print("Got response from gemini")
-        print(response)
+        # print(response)
         print("Running custom model")
         # for text in test_inputs:
-        inputs = tokenizer(response, return_tensors="pt")
+        inputs = tokenizer(response, return_tensors="pt").to(device)
         print("feeding inputs")
         outputs = loaded_model.generate(**inputs, max_new_tokens=100, 
-                                do_sample=False, top_k=50,temperature=0.1, 
+                                do_sample=False, top_k=50, 
                                 eos_token_id=tokenizer.eos_token_id)
         print(tokenizer.decode(outputs[0], skip_special_tokens=True))
         return {
