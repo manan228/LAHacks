@@ -1,4 +1,5 @@
 # import flast module
+from flask_cors import CORS
 from flask import Flask, request
 import google.generativeai as genai
 from IPython.display import Markdown
@@ -8,6 +9,7 @@ import io
 genai.configure(api_key="AIzaSyDUIy8e6M5KTS348R1rQFWabw1KtYExXx4")
 # instance of flask application
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
  
 # home route that returns below text when root url is accessed
 @app.route("/")
