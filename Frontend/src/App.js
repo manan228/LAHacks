@@ -7,16 +7,17 @@ function App() {
     const file = fileInput.files[0];
 
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("file", file);
 
     try {
-      const response = axios.post("http://localhost:5000/upload", formData);
+      const response = await axios.post("http://localhost:5000/upload", formData);
 
       console.log(response);
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <div className="App">
       <input type="file" name="image" id="fileInput" />
